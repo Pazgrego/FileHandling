@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 public class FileHandling {
     private static void ReadAndFilterFile (String path) throws IOException {
@@ -40,6 +41,14 @@ public class FileHandling {
     }
 
     public static void main(String[] args) throws Exception {
-        ReadAndFilterFile("C:/Users/PAZ/IdeaProjects/tryselenium/src/SecurityResultGitHub 06-06-19 18 11.txt");
+        if(args != null && args.length > 0){
+            ReadAndFilterFile(args[0]);
+        }
+        else {
+            System.out.println("Enter a path to JSON file");
+            Scanner scanner = new Scanner(System.in);
+            String path = scanner.nextLine();
+            ReadAndFilterFile(path.substring(1, path.length()-2));
+        }
     }
 }
