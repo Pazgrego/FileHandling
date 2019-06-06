@@ -8,23 +8,26 @@ import java.util.Date;
 public class FileHandling {
     private static void ReadAndFilterFile (String path) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(path));
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
         String line;
         int index = 1;
 
         while ((line = br.readLine()) != null) {
-            CreateJSONFile(gson, line, index);
-            index++;
+           CreateJSONFileRunnable th = new CreateJSONFileRunnable(line, index);
+           new Thread(th).start();
+           index++;
         }
     }
 
-    private static void CreateJSONFile(Gson gson, String line, int index) throws IOException {
+    public static void CreateJSONFile( String line, int index) throws IOException {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+
         GithubRepository repo = gson.fromJson(line, GithubRepository.class);
+
         FileWriter writer = new FileWriter("SecurityResultGitHub-" + index  + " " + getCurrentTime() + ".txt");
         BufferedWriter bw = new BufferedWriter(writer);
-        bw.write(gson.toJson(repo));
 
+        bw.write(gson.toJson(repo));
         bw.flush();
         bw.close();
     }
